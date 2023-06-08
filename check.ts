@@ -58,23 +58,27 @@ let nextUpdateInterval: ReturnType<typeof setInterval>;
 const checkForTickets = async () => {
   clearInterval(nextUpdateInterval);
   console.log("\nChecking for tickets...");
-  const ordinaryTickets = await fetchTickets(ordinaryId);
-  const dntTickets = await fetchTickets(dntId);
+  try {
+    const ordinaryTickets = await fetchTickets(ordinaryId);
+    const dntTickets = await fetchTickets(dntId);
 
-  const hasOrdinaryTickets = hasTickets(ordinaryTickets);
-  const hasDNTTickets = hasTickets(dntTickets);
-  if (hasOrdinaryTickets) {
-    console.log("found ordinary tickets!");
-    sendNotification("Vinjerock", "Vanlig billett tilgjengelig! Trykk for å komme til tickemaster", ticketmasterUrl);
-  } else {
-    console.log("found no ordinary tickets");
-  }
+    const hasOrdinaryTickets = hasTickets(ordinaryTickets);
+    const hasDNTTickets = hasTickets(dntTickets);
+    if (hasOrdinaryTickets) {
+      console.log("found ordinary tickets!");
+      sendNotification("Vinjerock", "Vanlig billett tilgjengelig! Trykk for å komme til tickemaster", ticketmasterUrl);
+    } else {
+      console.log("found no ordinary tickets");
+    }
 
-  if (hasDNTTickets) {
-    console.log("found DNT tickets!");
-    sendNotification("Vinjerock", "DNT-billett tilgjengelig! Trykk for å komme til tickemaster", ticketmasterUrl);
-  } else {
-    console.log("found no DNT tickets");
+    if (hasDNTTickets) {
+      console.log("found DNT tickets!");
+      sendNotification("Vinjerock", "DNT-billett tilgjengelig! Trykk for å komme til tickemaster", ticketmasterUrl);
+    } else {
+      console.log("found no DNT tickets");
+    }
+  } catch (e) {
+    console.error("Something went wrong", e);
   }
 
   const delay = Math.round(Math.random() * 1_000) * 60;
