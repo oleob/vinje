@@ -45,11 +45,13 @@ const sendNotification = (title: string, message: string, open?: string) => {
 
 let nextUpdate: Date = new Date();
 
+let alternate = 0;
 const showTimeToNextUpdate = () => {
+  alternate = (alternate + 1) % 2;
   const distance = intervalToDuration({ start: new Date(), end: nextUpdate });
-  const text = `Next update in ${distance.minutes} minute${distance.minutes !== 1 ? "s" : ""} and ${
-    distance.seconds
-  } second${distance.seconds !== 1 ? "s" : ""}`;
+  const text = `${alternate ? "⏳" : "⌛"} Next update in ${distance.minutes} minute${
+    distance.minutes !== 1 ? "s" : ""
+  } and ${distance.seconds} second${distance.seconds !== 1 ? "s" : ""}`;
   process.stdout.cursorTo(0);
   process.stdout.write(text);
 };
@@ -57,7 +59,7 @@ const showTimeToNextUpdate = () => {
 let nextUpdateInterval: ReturnType<typeof setInterval>;
 const checkForTickets = async () => {
   clearInterval(nextUpdateInterval);
-  console.log("\nChecking for tickets...");
+  console.log("\n🔄 Checking for tickets...");
   try {
     const ordinaryTickets = await fetchTickets(ordinaryId);
     const dntTickets = await fetchTickets(dntId);
@@ -65,20 +67,24 @@ const checkForTickets = async () => {
     const hasOrdinaryTickets = hasTickets(ordinaryTickets);
     const hasDNTTickets = hasTickets(dntTickets);
     if (hasOrdinaryTickets) {
-      console.log("found ordinary tickets!");
-      sendNotification("Vinjerock", "Vanlig billett tilgjengelig! Trykk for å komme til tickemaster", ticketmasterUrl);
+      console.log("😱 Found ordinary tickets!");
+      sendNotification(
+        "Vinjerock",
+        "😱 Vanlig billett tilgjengelig! Trykk for å komme til tickemaster",
+        ticketmasterUrl
+      );
     } else {
-      console.log("found no ordinary tickets");
+      console.log("😔 Found no ordinary tickets");
     }
 
     if (hasDNTTickets) {
-      console.log("found DNT tickets!");
-      sendNotification("Vinjerock", "DNT-billett tilgjengelig! Trykk for å komme til tickemaster", ticketmasterUrl);
+      console.log("😱 Found DNT tickets!");
+      sendNotification("Vinjerock", "😱 DNT-billett tilgjengelig! Trykk for å komme til tickemaster", ticketmasterUrl);
     } else {
-      console.log("found no DNT tickets");
+      console.log("😔 Found no DNT tickets");
     }
   } catch (e) {
-    console.error("Something went wrong", e);
+    console.error("💥Something went wrong💥", e);
   }
 
   const delay = Math.round(Math.random() * 1_000) * 60;
