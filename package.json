@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "tsx check.ts"
+    "start": "tsc && node ./build/check.js"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +13,6 @@
     "@types/node-notifier": "^8.0.2",
     "date-fns": "^2.30.0",
     "node-notifier": "^10.0.1",
-    "tsx": "^3.12.7",
     "typescript": "^5.1.3"
   }
 }
