@@ -82,9 +82,9 @@ const checkForTickets = async () => {
   }
 
   const delay = Math.round(Math.random() * 1_000) * 60;
-  const twoMinutesInMS = 1000 * 60 * 2;
+  const oneMinutesInMS = 1000 * 60;
 
-  const timeToNextUpate = delay + twoMinutesInMS;
+  const timeToNextUpate = delay + oneMinutesInMS;
 
   nextUpdate = addMilliseconds(new Date(), timeToNextUpate);
 
